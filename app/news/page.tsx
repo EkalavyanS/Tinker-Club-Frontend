@@ -4,67 +4,91 @@ import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import { Calendar, User, ArrowRight } from "lucide-react"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 export default function NewsPage() {
-  const news = [
-    {
-      title: "Tinker Club Wins National Robotics Championship",
-      excerpt:
-        "Our team secured first place in the National Robotics Championship with their innovative autonomous navigation system.",
-      content:
-        "After months of preparation and countless hours of coding and testing, Team Tinker has achieved a remarkable victory...",
-      author: "Sarah Johnson",
-      date: "2024-01-25",
-      image: "/placeholder.svg?height=300&width=500",
-      category: "Achievement",
-      featured: true,
-    },
-    {
-      title: "New Arduino Lab Opens with State-of-the-Art Equipment",
-      excerpt:
-        "The club inaugurates a new dedicated Arduino laboratory equipped with the latest development boards and sensors.",
-      content:
-        "We're excited to announce the opening of our new Arduino laboratory, featuring over 50 development stations...",
-      author: "Mike Chen",
-      date: "2024-01-20",
-      image: "/placeholder.svg?height=300&width=500",
-      category: "Facility",
-      featured: false,
-    },
-    {
-      title: "Guest Lecture: Future of AI in Robotics",
-      excerpt:
-        "Renowned AI researcher Dr. Emily Watson shares insights on the integration of artificial intelligence in modern robotics.",
-      content:
-        "Dr. Emily Watson from MIT delivered an inspiring lecture on how AI is revolutionizing the field of robotics...",
-      author: "Alex Rodriguez",
-      date: "2024-01-18",
-      image: "/placeholder.svg?height=300&width=500",
-      category: "Event",
-      featured: false,
-    },
-    {
-      title: "Student Project Featured in Tech Magazine",
-      excerpt: "Junior member's IoT weather station project gets recognition in a leading technology publication.",
-      content:
-        "We're proud to announce that our member John Doe's innovative weather monitoring system has been featured...",
-      author: "Lisa Park",
-      date: "2024-01-15",
-      image: "/placeholder.svg?height=300&width=500",
-      category: "Recognition",
-      featured: true,
-    },
-    {
-      title: "Collaboration with Local Tech Companies",
-      excerpt: "Tinker Club partners with three local tech companies to provide internship opportunities for members.",
-      content: "We're thrilled to announce new partnerships that will provide real-world experience for our members...",
-      author: "David Kim",
-      date: "2024-01-12",
-      image: "/placeholder.svg?height=300&width=500",
-      category: "Partnership",
-      featured: false,
-    },
-  ]
+  const [news, setNews] = useState([])
+  const getnews = async ()=>{
+    try {
+      const response = await fetch('https://tinkering-club-backend.onrender.com/news');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const news = await response.json();
+      console.log('Fetched events:', event);
+      setNews(news)
+      console.log(news)
+      return news;
+    } catch (error) {
+      console.error('Failed to fetch events:', error);
+      return null;
+    }
+  }
+  // const news = [
+  //   {
+  //     title: "Tinker Club Wins National Robotics Championship",
+  //     excerpt:
+  //       "Our team secured first place in the National Robotics Championship with their innovative autonomous navigation system.",
+  //     content:
+  //       "After months of preparation and countless hours of coding and testing, Team Tinker has achieved a remarkable victory...",
+  //     author: "Sarah Johnson",
+  //     date: "2024-01-25",
+  //     image: "/placeholder.svg?height=300&width=500",
+  //     category: "Achievement",
+  //     featured: true,
+  //   },
+  //   {
+  //     title: "New Arduino Lab Opens with State-of-the-Art Equipment",
+  //     excerpt:
+  //       "The club inaugurates a new dedicated Arduino laboratory equipped with the latest development boards and sensors.",
+  //     content:
+  //       "We're excited to announce the opening of our new Arduino laboratory, featuring over 50 development stations...",
+  //     author: "Mike Chen",
+  //     date: "2024-01-20",
+  //     image: "/placeholder.svg?height=300&width=500",
+  //     category: "Facility",
+  //     featured: false,
+  //   },
+  //   {
+  //     title: "Guest Lecture: Future of AI in Robotics",
+  //     excerpt:
+  //       "Renowned AI researcher Dr. Emily Watson shares insights on the integration of artificial intelligence in modern robotics.",
+  //     content:
+  //       "Dr. Emily Watson from MIT delivered an inspiring lecture on how AI is revolutionizing the field of robotics...",
+  //     author: "Alex Rodriguez",
+  //     date: "2024-01-18",
+  //     image: "/placeholder.svg?height=300&width=500",
+  //     category: "Event",
+  //     featured: false,
+  //   },
+  //   {
+  //     title: "Student Project Featured in Tech Magazine",
+  //     excerpt: "Junior member's IoT weather station project gets recognition in a leading technology publication.",
+  //     content:
+  //       "We're proud to announce that our member John Doe's innovative weather monitoring system has been featured...",
+  //     author: "Lisa Park",
+  //     date: "2024-01-15",
+  //     image: "/placeholder.svg?height=300&width=500",
+  //     category: "Recognition",
+  //     featured: true,
+  //   },
+  //   {
+  //     title: "Collaboration with Local Tech Companies",
+  //     excerpt: "Tinker Club partners with three local tech companies to provide internship opportunities for members.",
+  //     content: "We're thrilled to announce new partnerships that will provide real-world experience for our members...",
+  //     author: "David Kim",
+  //     date: "2024-01-12",
+  //     image: "/placeholder.svg?height=300&width=500",
+  //     category: "Partnership",
+  //     featured: false,
+  //   },
+  // ]
+
+  useEffect(() => {
+    getnews(); // <-- actually call the function
+  }, []);
 
   const featuredNews = news.filter((article) => article.featured)
   const regularNews = news.filter((article) => !article.featured)

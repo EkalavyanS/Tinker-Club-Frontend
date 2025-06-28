@@ -3,61 +3,84 @@
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import { Calendar, MapPin, Clock, Users } from "lucide-react"
+import { use, useEffect, useState } from "react"
 
 export default function EventsPage() {
-  const events = [
-    {
-      title: "Arduino Workshop Series",
-      date: "2024-02-15",
-      time: "2:00 PM - 5:00 PM",
-      location: "Tech Lab A",
-      description: "Comprehensive workshop covering Arduino basics, sensors, and project development",
-      attendees: 45,
-      status: "upcoming",
-      category: "Workshop",
-    },
-    {
-      title: "Robotics Competition 2024",
-      date: "2024-03-10",
-      time: "9:00 AM - 6:00 PM",
-      location: "Main Auditorium",
-      description: "Annual robotics competition featuring line-following and obstacle-avoiding challenges",
-      attendees: 120,
-      status: "upcoming",
-      category: "Competition",
-    },
-    {
-      title: "IoT Hackathon",
-      date: "2024-01-20",
-      time: "10:00 AM - 8:00 PM",
-      location: "Innovation Center",
-      description: "24-hour hackathon focused on Internet of Things solutions for smart cities",
-      attendees: 80,
-      status: "completed",
-      category: "Hackathon",
-    },
-    {
-      title: "3D Printing Masterclass",
-      date: "2024-02-28",
-      time: "1:00 PM - 4:00 PM",
-      location: "Maker Space",
-      description: "Learn advanced 3D printing techniques and design optimization",
-      attendees: 30,
-      status: "upcoming",
-      category: "Workshop",
-    },
-    {
-      title: "Tech Talk: AI in Robotics",
-      date: "2024-01-15",
-      time: "3:00 PM - 4:30 PM",
-      location: "Conference Room B",
-      description: "Guest lecture on the integration of artificial intelligence in modern robotics",
-      attendees: 65,
-      status: "completed",
-      category: "Seminar",
-    },
-  ]
+  const [events, setEvents] = useState([])
+  const getevents = async ()=>{
+    try {
+      const response = await fetch('https://tinkering-club-backend.onrender.com/events');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const event = await response.json();
+      console.log('Fetched events:', event);
+      setEvents(event)
+      console.log(event)
+      return event;
+    } catch (error) {
+      console.error('Failed to fetch events:', error);
+      return null;
+    }
+  }
 
+  // const events = [
+  //   {
+  //     title: "Arduino Workshop Series",
+  //     date: "2024-02-15",
+  //     time: "2:00 PM - 5:00 PM",
+  //     location: "Tech Lab A",
+  //     description: "Comprehensive workshop covering Arduino basics, sensors, and project development",
+  //     attendees: 45,
+  //     status: "upcoming",
+  //     category: "Workshop",
+  //   },
+  //   {
+  //     title: "Robotics Competition 2024",
+  //     date: "2024-03-10",
+  //     time: "9:00 AM - 6:00 PM",
+  //     location: "Main Auditorium",
+  //     description: "Annual robotics competition featuring line-following and obstacle-avoiding challenges",
+  //     attendees: 120,
+  //     status: "upcoming",
+  //     category: "Competition",
+  //   },
+  //   {
+  //     title: "IoT Hackathon",
+  //     date: "2024-01-20",
+  //     time: "10:00 AM - 8:00 PM",
+  //     location: "Innovation Center",
+  //     description: "24-hour hackathon focused on Internet of Things solutions for smart cities",
+  //     attendees: 80,
+  //     status: "completed",
+  //     category: "Hackathon",
+  //   },
+  //   {
+  //     title: "3D Printing Masterclass",
+  //     date: "2024-02-28",
+  //     time: "1:00 PM - 4:00 PM",
+  //     location: "Maker Space",
+  //     description: "Learn advanced 3D printing techniques and design optimization",
+  //     attendees: 30,
+  //     status: "upcoming",
+  //     category: "Workshop",
+  //   },
+  //   {
+  //     title: "Tech Talk: AI in Robotics",
+  //     date: "2024-01-15",
+  //     time: "3:00 PM - 4:30 PM",
+  //     location: "Conference Room B",
+  //     description: "Guest lecture on the integration of artificial intelligence in modern robotics",
+  //     attendees: 65,
+  //     status: "completed",
+  //     category: "Seminar",
+  //   },
+  // ]
+  useEffect(() => {
+    getevents(); // <-- actually call the function
+  }, []);
   const upcomingEvents = events.filter((event) => event.status === "upcoming")
   const pastEvents = events.filter((event) => event.status === "completed")
 

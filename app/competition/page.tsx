@@ -3,63 +3,66 @@
 import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import { Trophy, Calendar, Users, Award, Target, Zap } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export default function CompetitionPage() {
-  const competitions = [
-    {
-      title: "RoboRace 2024",
-      description: "Annual autonomous robot racing competition featuring speed and precision challenges",
-      date: "2024-03-15",
-      registrationDeadline: "2024-03-01",
-      participants: 45,
-      maxParticipants: 60,
-      prize: "$5,000",
-      difficulty: "Advanced",
-      categories: ["Autonomous Navigation", "Speed Challenge", "Obstacle Course"],
-      status: "open",
-      featured: true,
-    },
-    {
-      title: "Arduino Innovation Challenge",
-      description: "Create innovative solutions using Arduino platforms for real-world problems",
-      date: "2024-04-20",
-      registrationDeadline: "2024-04-05",
-      participants: 32,
-      maxParticipants: 50,
-      prize: "$3,000",
-      difficulty: "Intermediate",
-      categories: ["IoT Solutions", "Smart Home", "Environmental Monitoring"],
-      status: "open",
-      featured: false,
-    },
-    {
-      title: "Drone Programming Contest",
-      description: "Program drones to complete complex aerial maneuvers and tasks",
-      date: "2024-05-10",
-      registrationDeadline: "2024-04-25",
-      participants: 18,
-      maxParticipants: 30,
-      prize: "$2,500",
-      difficulty: "Advanced",
-      categories: ["Aerial Navigation", "Precision Landing", "Payload Delivery"],
-      status: "open",
-      featured: false,
-    },
-    {
-      title: "Beginner Bot Battle",
-      description: "Entry-level robotics competition perfect for newcomers to the field",
-      date: "2024-02-28",
-      registrationDeadline: "2024-02-15",
-      participants: 28,
-      maxParticipants: 40,
-      prize: "$1,000",
-      difficulty: "Beginner",
-      categories: ["Line Following", "Sumo Wrestling", "Maze Solving"],
-      status: "closed",
-      featured: false,
-    },
-  ]
 
+  // const competitions = [
+  //   {
+  //     title: "RoboRace 2024",
+  //     description: "Annual autonomous robot racing competition featuring speed and precision challenges",
+  //     date: "2024-03-15",
+  //     registrationDeadline: "2024-03-01",
+  //     participants: 45,
+  //     maxParticipants: 60,
+  //     prize: "$5,000",
+  //     difficulty: "Advanced",
+  //     categories: ["Autonomous Navigation", "Speed Challenge", "Obstacle Course"],
+  //     status: "open",
+  //     featured: true,
+  //   },
+  //   {
+  //     title: "Arduino Innovation Challenge",
+  //     description: "Create innovative solutions using Arduino platforms for real-world problems",
+  //     date: "2024-04-20",
+  //     registrationDeadline: "2024-04-05",
+  //     participants: 32,
+  //     maxParticipants: 50,
+  //     prize: "$3,000",
+  //     difficulty: "Intermediate",
+  //     categories: ["IoT Solutions", "Smart Home", "Environmental Monitoring"],
+  //     status: "open",
+  //     featured: false,
+  //   },
+  //   {
+    //     title: "Drone Programming Contest",
+    //     description: "Program drones to complete complex aerial maneuvers and tasks",
+    //     date: "2024-05-10",
+    //     registrationDeadline: "2024-04-25",
+    //     participants: 18,
+    //     maxParticipants: 30,
+    //     prize: "$2,500",
+    //     difficulty: "Advanced",
+    //     categories: ["Aerial Navigation", "Precision Landing", "Payload Delivery"],
+    //     status: "open",
+    //     featured: false,
+    //   },
+    //   {
+      //     title: "Beginner Bot Battle",
+      //     description: "Entry-level robotics competition perfect for newcomers to the field",
+      //     date: "2024-02-28",
+      //     registrationDeadline: "2024-02-15",
+      //     participants: 28,
+      //     maxParticipants: 40,
+      //     prize: "$1,000",
+      //     difficulty: "Beginner",
+      //     categories: ["Line Following", "Sumo Wrestling", "Maze Solving"],
+      //     status: "closed",
+      //     featured: false,
+      //   },
+      // ]
+      
+  const [competitions, setCompetition] = useState([])
   const achievements = [
     {
       title: "National Robotics Championship 2023",
@@ -80,6 +83,28 @@ export default function CompetitionPage() {
       description: "Line following robot with advanced sensor integration",
     },
   ]
+  const getcompetition = async ()=>{
+    try {
+      const response = await fetch('https://tinkering-club-backend.onrender.com/competitions');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const competitions = await response.json();
+      console.log('Fetched events:', competitions);
+      setCompetition(competitions)
+      console.log(competitions)
+      return competitions;
+    } catch (error) {
+      console.error('Failed to fetch events:', error);
+      return null;
+    }
+  }
+
+    useEffect(() => {
+      getcompetition(); // <-- actually call the function
+    }, [])  
 
   const openCompetitions = competitions.filter((comp) => comp.status === "open")
   const pastCompetitions = competitions.filter((comp) => comp.status === "closed")

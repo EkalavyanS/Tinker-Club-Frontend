@@ -4,8 +4,10 @@ import { motion } from "framer-motion"
 import { Navigation } from "@/components/navigation"
 import { ExternalLink, Github, Star, Calendar, UsersIcon } from "lucide-react"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 export default function ProjectsPage() {
+  const [projects, setProjects] = useState([])
   const categories = [
     { name: "All", count: 12, active: true },
     { name: "Robotics", count: 5, active: false },
@@ -13,90 +15,31 @@ export default function ProjectsPage() {
     { name: "AI/ML", count: 3, active: false },
   ]
 
-  const projects = [
-    {
-      title: "Autonomous Delivery Robot",
-      description: "AI-powered robot capable of autonomous navigation and package delivery in complex environments",
-      image: "/placeholder.svg?height=300&width=400",
-      tags: ["Robotics", "AI", "Computer Vision", "ROS"],
-      github: "#",
-      demo: "#",
-      featured: true,
-      category: "Robotics",
-      team: "Team Alpha",
-      duration: "6 months",
-      status: "Completed",
-    },
-    {
-      title: "Smart Campus IoT Network",
-      description:
-        "Comprehensive IoT system for monitoring and optimizing campus resources including energy, water, and air quality",
-      image: "/placeholder.svg?height=300&width=400",
-      tags: ["IoT", "Sensors", "Data Analytics", "Cloud"],
-      github: "#",
-      demo: "#",
-      featured: true,
-      category: "IoT",
-      team: "Team Beta",
-      duration: "8 months",
-      status: "Ongoing",
-    },
-    {
-      title: "Gesture-Controlled Drone",
-      description: "Drone controlled through hand gestures using computer vision and machine learning algorithms",
-      image: "/placeholder.svg?height=300&width=400",
-      tags: ["Computer Vision", "Drone", "Machine Learning"],
-      github: "#",
-      demo: "#",
-      featured: false,
-      category: "Robotics",
-      team: "Team Gamma",
-      duration: "4 months",
-      status: "Completed",
-    },
-    {
-      title: "AI-Powered Traffic Management",
-      description: "Intelligent traffic light system that adapts to real-time traffic conditions using AI",
-      image: "/placeholder.svg?height=300&width=400",
-      tags: ["AI", "Smart City", "Computer Vision", "Arduino"],
-      github: "#",
-      demo: "#",
-      featured: true,
-      category: "AI/ML",
-      team: "Team Delta",
-      duration: "5 months",
-      status: "Completed",
-    },
-    {
-      title: "Voice-Controlled Home Assistant",
-      description: "Custom-built smart home system with natural language processing and IoT device integration",
-      image: "/placeholder.svg?height=300&width=400",
-      tags: ["NLP", "IoT", "Voice Recognition", "Smart Home"],
-      github: "#",
-      demo: "#",
-      featured: false,
-      category: "IoT",
-      team: "Team Epsilon",
-      duration: "3 months",
-      status: "Completed",
-    },
-    {
-      title: "Robotic Arm with ML Vision",
-      description: "6-DOF robotic arm with machine learning-based object recognition and manipulation capabilities",
-      image: "/placeholder.svg?height=300&width=400",
-      tags: ["Robotics", "Machine Learning", "Computer Vision"],
-      github: "#",
-      demo: "#",
-      featured: false,
-      category: "Robotics",
-      team: "Team Zeta",
-      duration: "7 months",
-      status: "Ongoing",
-    },
-  ]
+  const getprojects = async ()=>{
+    try {
+      const response = await fetch('https://tinkering-club-backend.onrender.com/projects');
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const project = await response.json();
+      console.log('Fetched events:', project);
+      setProjects(project)
+      console.log(project)
+      return project;
+    } catch (error) {
+      console.error('Failed to fetch events:', error);
+      return null;
+    }
+  }
+
+  useEffect(() => {
+    getprojects(); // <-- actually call the function
+  }, [])  
 
   const featuredProjects = projects.filter((project) => project.featured)
-  const regularProjects = projects.filter((project) => !project.featured)
+  const regularProjects = projects.fil ter((project) => !project.featured)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
@@ -162,9 +105,9 @@ export default function ProjectsPage() {
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           {featuredProjects.map((project, index) => (
             <motion.div
-              key={project.title}
+              key={project.titlawe}
               initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y:w 0 }}
               transition={{ delay: index * 0.2, duration: 0.8 }}
               viewport={{ once: true }}
               whileHover={{ y: -10 }}
