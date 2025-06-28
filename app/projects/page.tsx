@@ -39,7 +39,7 @@ export default function ProjectsPage() {
   }, [])  
 
   const featuredProjects = projects.filter((project) => project.featured)
-  const regularProjects = projects.fil ter((project) => !project.featured)
+  const regularProjects = projects.filter((project) => !project.featured)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white">
@@ -105,9 +105,9 @@ export default function ProjectsPage() {
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           {featuredProjects.map((project, index) => (
             <motion.div
-              key={project.titlawe}
+              key={project.title}
               initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y:w 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.2, duration: 0.8 }}
               viewport={{ once: true }}
               whileHover={{ y: -10 }}
@@ -287,5 +287,5 @@ export default function ProjectsPage() {
         </div>
       </section>
     </div>
-  )
-}
+  );
+} 
